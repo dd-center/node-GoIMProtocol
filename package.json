@@ -1,0 +1,19 @@
+{
+  "name": "goimprotocol",
+  "version": "1.0.0",
+  "description": "goim client for nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shugen002/node-GoIMProtocol.git"
+  },
+  "author": "shugen",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/shugen002/node-GoIMProtocol/issues"
+  },
+  "homepage": "https://github.com/shugen002/node-GoIMProtocol#readme"
+}
