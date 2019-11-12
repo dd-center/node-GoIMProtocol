@@ -15,7 +15,10 @@ const Decoder = require("./decoder");
 const Encoder = require("./encoder");
 
 class GoIMConnection extends events.EventEmitter {
-
+    /**
+     * GoIM协议下的连接
+     * @param {Config} config 
+     */
     constructor(config) {
         super()
         this.type = config.type || (websocketAvaliable ? "websocket" : "tcp")
@@ -44,6 +47,9 @@ class GoIMConnection extends events.EventEmitter {
             5: "message"
         }
     }
+    /**
+     * 发送认证包，一般会在连接上后自动发送
+     */
     Auth() {
         this.send({
             protocolVersion: this.version,
@@ -52,16 +58,22 @@ class GoIMConnection extends events.EventEmitter {
         })
     }
     onAuthSucceeded(body) {
-        this.Heartbeat()
-        this.heartbeatTimer = setInterval(this.Heartbeat.bind(this), 30 * 1000);
+        this.heartbeat()
+        this.heartbeatTimer = setInterval(this.heartbeat.bind(this), 30 * 1000);
     }
-    Heartbeat() {
+    /**
+     * 发送心跳包，一般不需要手动调用
+     */
+    heartbeat() {
         this.send({
             protocolVersion: this.version,
             operation: 2,
             body: Buffer.from('[object Object]')
         })
     }
+    /**
+     * 连接，请确保类型正确，否则将什么都不会做
+     */
     connect() {
         if (this.type == "tcp") {
             /**
@@ -109,8 +121,23 @@ class GoIMConnection extends events.EventEmitter {
             data = data.slice(packet.packageLength);
         }
     }
+    /**
+     * 发送数据包
+     * @param {*} packet 
+     */
     send(packet){
         return this.connection.write(this.encoder.encode(packet))
+    }
+    /**
+     * 断开连接
+     */
+    close(){
+        if(this.type == "websocket"){
+            this.__connection.close()
+        }else{
+            this.__connection.end()
+        }
+        clearInterval(this.heartbeatTimer);
     }
 }
 module.exports = GoIMConnection;
