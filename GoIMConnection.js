@@ -28,11 +28,11 @@ class GoIMConnection extends events.EventEmitter {
          */
         this.host = config.host;
         this.port = config.port;
-        this.path = config.path || "";// /sub
+        this.path = config.path || "";
         this.wss = config.wss || false;
         this.encoder = config.encoder || new Encoder();
         this.__connection = config.connection;
-        this.authInfo = config.authInfo; // {roomId:912226,token:12}
+        this.authInfo = config.authInfo;
         this.onAuth = config.onAuth;
         this.onHeartbeat = config.onHeartbeat;
         this.version = config.version || 1

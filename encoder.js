@@ -74,10 +74,6 @@ class Encoder {
                         packet[this.config[i].name],
                         result.slice(this.config[i].offset+this.config[i].length)
                     ])
-
-                    // packet[this.config[i].name].copy(result,0,this.config[i].offset)
-                    // result.write(Buffer.from(packet[this.config[i].name]), this.config[i].offset)
-                    // result  = Buffer.concat([result, Buffer.from(packet[this.config[i].name])])
                     break;
                 default:
                     throw new Error("Unknown Type : ", this.config[i].type);

@@ -1,5 +1,4 @@
 var GoIMProtocol = require('./');
-// https://api.live.bilibili.com/room/v1/Danmu/getConf?room_id=912226&platform=pc&player=web
 
 var connection = new GoIMProtocol.GoIMConnection({
     host:"broadcastlv.chat.bilibili.com",
