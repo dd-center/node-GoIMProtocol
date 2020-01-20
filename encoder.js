@@ -7,8 +7,9 @@
 /**
  * @type {Array<protocolItem>}
  */
+
+
 var DefaultConfig = [
-    { name: "packageLength", type: "UInt32", offset: 0, length: 4, default(packet) { return packet.headerLength + packet.body.length } },
     { name: "headerLength", type: "UInt16", offset: 4, length: 2, default: 16 },
     { name: "protocolVersion", type: "UInt16", offset: 6, length: 2, default: 1 },
     { name: "operation", type: "UInt32", offset: 8, length: 4, default: 0 },
@@ -16,11 +17,12 @@ var DefaultConfig = [
     {
         name: "body", type: "Buffer",
         offset(result,packet) {
-            return packet.headerLength
+            return packet.headerLength // packet.headerLength.length
         }, length(result,packet) {
             return packet.body.length
         }, default: Buffer.from("")
-    }
+    },
+    { name: "packageLength", type: "UInt32", offset: 0, length: 4, default(packet) { return packet.headerLength + packet.body.length } },
 ]
 /**
  * 编码器

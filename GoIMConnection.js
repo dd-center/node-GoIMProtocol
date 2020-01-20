@@ -40,10 +40,10 @@ class GoIMConnection extends events.EventEmitter {
         this.onHeartbeat = config.onHeartbeat;
         this.version = config.version || 1
         this.heartbeatTimer = 0;
-        this.on('AuthSucceeded', this.onAuthSucceeded)
+        this.on('authSucceeded', this.onAuthSucceeded)
         this.operationMap = {
             3: "heartbeatReply",
-            8: "AuthSucceeded",
+            8: "authSucceeded",
             5: "message"
         }
     }
@@ -93,7 +93,7 @@ class GoIMConnection extends events.EventEmitter {
             /**
              * @type {WebSocket}
              */
-            this.__connection = new ws(`${this.wss ? 'wss': 'ws'}://${this.host}:${this.port}/${this.path}`)
+            this.__connection = new ws(`${this.wss ? 'wss' : 'ws'}://${this.host}:${this.port}/${this.path}`)
             this.__connection.on('open', this.__onConnect.bind(this))
             this.__connection.on('error', this.__onError.bind(this))
             this.__connection.on('close', this.__onClose.bind(this))
@@ -108,15 +108,15 @@ class GoIMConnection extends events.EventEmitter {
     __onError(e) {
         this.emit('error', e)
     }
-    __onClose(e) {
+    __onClose(code, reason) {
         clearInterval(this.heartbeatTimer);
-        this.emit('close',e)
+        this.emit('close', code, reason)
     }
     __onData(data) {
         while (data.length > 0) {
             let packet = this.decoder.decode(data);
             if (this.operationMap[packet.operation]) {
-                this.emit(this.operationMap[packet.operation] || "UnknownOperation",packet)
+                this.emit(this.operationMap[packet.operation] || "UnknownOperation", packet)
             }
             data = data.slice(packet.packageLength);
         }
@@ -125,16 +125,16 @@ class GoIMConnection extends events.EventEmitter {
      * 发送数据包
      * @param {*} packet 
      */
-    send(packet){
+    send(packet) {
         return this.connection.write(this.encoder.encode(packet))
     }
     /**
      * 断开连接
      */
-    close(){
-        if(this.type == "websocket"){
+    close() {
+        if (this.type == "websocket") {
             this.__connection.close()
-        }else{
+        } else {
             this.__connection.end()
         }
         clearInterval(this.heartbeatTimer);
