@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/shugen002/node-GoIMProtocol/issues"
   },
-  "homepage": "https://github.com/shugen002/node-GoIMProtocol#readme"
+  "homepage": "https://github.com/shugen002/node-GoIMProtocol#readme",
+  "optionalDependencies": {
+    "ws": "^7.2.3"
+  }
 }

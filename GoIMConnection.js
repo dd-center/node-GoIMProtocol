@@ -1,8 +1,5 @@
-const net = require("net")
-let websocketAvaliable = false
-/**
- * @type {ws}
- */
+const net = require("net");
+let websocketAvaliable = false;
 let ws;
 try {
     ws = require('ws');
@@ -93,12 +90,15 @@ class GoIMConnection extends events.EventEmitter {
             /**
              * @type {WebSocket}
              */
-            this.__connection = new ws(`${this.wss ? 'wss' : 'ws'}://${this.host}:${this.port}/${this.path}`)
+            this.__connection = new ws(`${this.wss ? 'wss' : 'ws'}://${this.host}:${this.port}/${this.path}`, [], { perMessageDeflate: false })
             this.__connection.on('open', this.__onConnect.bind(this))
             this.__connection.on('error', this.__onError.bind(this))
             this.__connection.on('close', this.__onClose.bind(this))
             this.connection = ws.createWebSocketStream(this.__connection)
-            this.connection.on('data', this.__onData.bind(this))
+            this.connection.on('data', this.__onData.bind(this));
+            this.connection.on('error', () => {
+                // already handle in up layer
+            })
         }
     }
     __onConnect() {
